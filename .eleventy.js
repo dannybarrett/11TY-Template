@@ -77,8 +77,9 @@ module.exports = function(eleventyConfig) {
         }
 
         iterateThroughChildren(document.body)
-        // console.log(document.doctype.name)
-        return '<!DOCTYPE html>\n' + document.head.outerHTML + '\n' + document.body.outerHTML
+        return '<!DOCTYPE html>\n<html lang="en">\n' + 
+            document.head.outerHTML + '\n' + 
+            document.body.outerHTML + '\n</html>'
         // return document.textContent
     })
 
