@@ -1,3 +1,7 @@
+/* body {
+    margin: 0;font-family: sans-serif;
+} */
+
 nav {
     display: flex; 
 }
@@ -5,4 +9,8 @@ nav {
 .app-nav-link {
     color: #000;
     margin-right: 8px;
+}
+
+h1 {
+    color: #663399;
 }

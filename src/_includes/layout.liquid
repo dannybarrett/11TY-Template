@@ -1,7 +1,6 @@
 ---
 title: Layout Test
 ---
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -10,13 +9,13 @@ title: Layout Test
         <title>{{ title }}</title>
         <link rel="stylesheet" href="/public/styles/layout.css">
     </head>
-    <body style="margin: 0; font-family: Helvetica;">
+    <body>
         <section id="app">
             <nav class="nav">
                 <a href="/" class="app-nav-link" client>Home</a>
                 <a href="/about" class="app-nav-link" client>About</a>
             </nav>
-            <h1 style="color: #663399;">{{ title }}</h1>
+            <h1>{{ title }}</h1>
             {{ content | safe }}
         </section>
         <script src="/public/scripts/client-link.js" async></script>

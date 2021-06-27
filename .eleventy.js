@@ -24,15 +24,17 @@ module.exports = function(eleventyConfig) {
             
             cssFromFile.rules.map(rule => {
                 let declarations = []
-
-                rule.declarations.map(declaration => {
-                    if (declaration.type === 'declaration')
-                        // declarations.push(declaration.property + ": " + declaration.value + ";")
-                        declarations.push({
-                            property: declaration.property,
-                            value: declaration.value,
-                        })
-                })
+                if (rule.declarations) {
+                    rule.declarations.map(declaration => {
+                        if (declaration.type === 'declaration')
+                            // declarations.push(declaration.property + ": " + declaration.value + ";")
+                            declarations.push({
+                                property: declaration.property,
+                                value: declaration.value,
+                            })
+                    })
+                }
+                
                 
                 rules.push({
                     selectors: rule.selectors,
@@ -47,28 +49,23 @@ module.exports = function(eleventyConfig) {
                 const child = parent.children[i]
 
                 rules.map(rule => {
-                    rule.selectors.map(selector => {
-                        // console.log(child.classList)
-                        // for (let j = 0; j < child.classList.length; j++) {
-                        //     // console.log(child.classList.item(j))
-                        //     if (child.classList.contains(selector.toLowerCase().replace('.', ''))) {
-                        //         console.log('We have a match: ' + selector)
-                        //     }
-                        // }
-                        if (child.nodeName.toLowerCase() === selector.toLowerCase()) {
-                            rule.declarations.map(declaration => {
-                                child.style[declaration.property] = declaration.value
-                                // console.log(declaration)
-                            })
-                        }
-                        if (child.classList.contains(selector.toLowerCase().replace('.', ''))) {
-                            console.log('We have a match: ' + selector)
-                            rule.declarations.map(declaration => {
-                                child.style[declaration.property] = declaration.value
-                                // console.log(declaration)
-                            })
-                        }
-                    })
+                    if (rule.selectors) {
+                        rule.selectors.map(selector => {
+                            if (child.nodeName.toLowerCase() === selector.toLowerCase()) {
+                                rule.declarations.map(declaration => {
+                                    child.style[declaration.property] = declaration.value
+                                    // console.log(declaration)
+                                })
+                            }
+                            if (child.classList.contains(selector.toLowerCase().replace('.', ''))) {
+                                // console.log('We have a match: ' + selector)
+                                rule.declarations.map(declaration => {
+                                    child.style[declaration.property] = declaration.value
+                                    // console.log(declaration)
+                                })
+                            }
+                        })
+                    }
                 })
 
                 if (child.children.length > 0) {
@@ -80,8 +77,9 @@ module.exports = function(eleventyConfig) {
         }
 
         iterateThroughChildren(document.body)
-        
-        return document.head.innerHTML + document.body.innerHTML
+        // console.log(document.doctype.name)
+        return '<!DOCTYPE html>\n' + document.head.outerHTML + '\n' + document.body.outerHTML
+        // return document.textContent
     })
 
     return {
