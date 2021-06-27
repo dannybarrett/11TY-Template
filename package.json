@@ -1,0 +1,20 @@
+{
+  "name": "eleventy-test",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "develop": "npx @11ty/eleventy --serve",
+    "build": "npx @11ty/eleventy"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^0.12.1"
+  },
+  "dependencies": {
+    "css": "^3.0.0",
+    "file-api": "^0.10.4",
+    "fse": "^4.0.1",
+    "jsdom": "^16.6.0",
+    "sass": "^1.35.1"
+  }
+}

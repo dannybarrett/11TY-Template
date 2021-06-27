@@ -1,0 +1,8 @@
+nav {
+    display: flex; 
+}
+
+.app-nav-link {
+    color: #0f0;
+    margin-right: 8px;
+}
