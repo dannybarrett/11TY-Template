@@ -10,6 +10,7 @@ description: A template for eleventy that uses CSR inlines CSS
         <meta name="description" content="{{description}}">
         <title>{{ title }}</title>
         <link rel="stylesheet" href="/public/styles/layout.css">
+        <link rel="manifest" href="/public/manifest.webmanifest">
         <script>
             if ('serviceWorker' in navigator)
                 navigator.serviceWorker.register('/service-worker.js')

@@ -3,4 +3,7 @@ layout: layout.liquid
 title: Home Page
 ---
 <p>This is the home page</p> 
-<img src="/public/images/sr2@800w.jpg" width="400.5" height="auto" alt="a sunroom">
+<picture>
+    <source srcset="/public/images/sr2@400w.jpg" width="200" height="132" media="(max-width: 400px)">
+    <img style="width:auto; max-width: 90%; height: auto;" src="/public/images/sr2@800w.jpg" width="400.5" height="auto" alt="a sunroom">
+</picture>

@@ -19,6 +19,10 @@ module.exports = function(eleventyConfig) {
         let rules = []
 
         for (let i = 0; i < stylesheetLinks.length; i++) {
+            if (stylesheetLinks.item(i).getAttribute('rel') === 'manifest') {
+                continue
+            }
+            
             const href = stylesheetLinks.item(i).href
             const cssFromFile = css.parse(
                                     sass.renderSync({file: __dirname + href}).css.toString(),
