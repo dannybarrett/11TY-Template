@@ -1,5 +1,17 @@
 let linkData = {}
 
+window.onpopstate = () => {
+    fetch(window.location.pathname)
+        .then(response => { return response.text() })
+        .then(data => {
+            const parser = new DOMParser()
+            const historyHTML = parser.parseFromString(data, 'text/html')
+            document.head.innerHTML = historyHTML.head.innerHTML
+            document.body.innerHTML = historyHTML.body.innerHTML
+        })
+        .catch(error => console.log(error))
+}
+
 
 function analyzeLinks() {
     linkData = {}
@@ -21,14 +33,17 @@ function analyzeLinks() {
                 .then(() => {
                     link.addEventListener('click', event => {
                         event.preventDefault()
-                        console.log('client side link clicked')
                         const parser = new DOMParser()
                         const linkHTML = parser.parseFromString(linkData[link.getAttribute('href')], 'text/html')
-                        // console.log(linkHTML.head)
-                        // console.log(linkHTML.body.style.fontFamily)
                         document.head.innerHTML = linkHTML.head.innerHTML
-                        // document.body.innerHTML = linkHTML.body.innerHTML
                         document.getElementById('app').innerHTML = linkHTML.getElementById('app').innerHTML
+                        const newHREF = window.location.origin + link.getAttribute('href')
+                        if (link.getAttribute('href') === '/') {
+                            window.history.pushState({}, '/', window.location.origin)
+                        } else {
+                            window.history.pushState({}, link.getAttribute('href').substring(1), newHREF)
+                        }
+
                         analyzeLinks()
                         return
                     })
@@ -36,6 +51,8 @@ function analyzeLinks() {
                 .catch(error => {
                     console.log('error: ' + error)
                 })
+
+
         }
     })
 }
