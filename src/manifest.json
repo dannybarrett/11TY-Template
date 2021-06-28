@@ -1,0 +1,7 @@
+{
+    "short_name": "VanillaTemplate",
+    "name": "Vanilla Eleventy Template",
+    "icons": ["public/images/icon-512w.jpg", "public/images/icon-192w.jpg"],
+    "start_url": "/",
+    "display": "standalone"
+}

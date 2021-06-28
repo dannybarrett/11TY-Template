@@ -6,9 +6,12 @@ const FileAPI = require('file-api')
 const FileAPIFile = FileAPI.File
 const FileAPIReader = FileAPI.FileReader
 const css = require('css')
+const pluginPWA = require('eleventy-plugin-pwa')
 
 module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy('public')
+    eleventyConfig.addPassthroughCopy('src/manifest.json')
+    eleventyConfig.addPlugin(pluginPWA)
 
     eleventyConfig.addTransform('my-transform', content => {
         const document = new JSDOM(content).window.document
