@@ -1,6 +1,7 @@
 ---
 title: Layout Test
 description: A template for eleventy that uses CSR inlines CSS
+css: 
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -10,15 +11,13 @@ description: A template for eleventy that uses CSR inlines CSS
         <meta name="description" content="{{description}}">
         <title>{{ title }}</title>
         <link rel="stylesheet" href="/public/styles/layout.css">
-        <link rel="manifest" href="/public/manifest.webmanifest">
-        <script>
-            if ('serviceWorker' in navigator)
-                navigator.serviceWorker.register('/service-worker.js')
-        </script>
+        {%- for cssFile in css -%}
+            <link rel="stylesheet" href="/public/styles/{{cssFile}}">
+        {%- endfor -%} 
     </head>
     <body>
-        <section id="app">
-            <nav class="nav">
+        <section class="app">
+            <nav class="nav"> 
                 <a href="/" class="app-nav-link" client>Home</a>
                 <a href="/about" class="app-nav-link" client>About</a>
             </nav>

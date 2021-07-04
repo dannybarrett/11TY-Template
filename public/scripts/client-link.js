@@ -36,7 +36,10 @@ function analyzeLinks() {
                         const parser = new DOMParser()
                         const linkHTML = parser.parseFromString(linkData[link.getAttribute('href')], 'text/html')
                         document.head.innerHTML = linkHTML.head.innerHTML
-                        document.getElementById('app').innerHTML = linkHTML.getElementById('app').innerHTML
+                        // const documentApp = document.querySelector('section')
+
+                        // console.log(documentApp)
+                        document.body.querySelector('.app').outerHTML = linkHTML.body.querySelector('.app').outerHTML
                         const newHREF = window.location.origin + link.getAttribute('href')
                         if (link.getAttribute('href') === '/') {
                             window.history.pushState({}, '/', window.location.origin)

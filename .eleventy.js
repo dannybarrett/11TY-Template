@@ -7,22 +7,25 @@ const FileAPIFile = FileAPI.File
 const FileAPIReader = FileAPI.FileReader
 const css = require('css')
 const pluginPWA = require('eleventy-plugin-pwa')
+const htmlMinify = require('html-minifier').minify
 
 module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy('public')
     eleventyConfig.addPassthroughCopy('src/manifest.json')
-    eleventyConfig.addPlugin(pluginPWA)
+    // eleventyConfig.addPlugin(pluginPWA)
 
     eleventyConfig.addTransform('my-transform', content => {
         const document = new JSDOM(content).window.document
         const stylesheetLinks = document.head.getElementsByTagName('link')
+        console.log(stylesheetLinks.length)
         let rules = []
 
         for (let i = 0; i < stylesheetLinks.length; i++) {
-            if (stylesheetLinks.item(i).getAttribute('rel') === 'manifest') {
+            console.log(stylesheetLinks.item(i)?.outerHTML)
+            if (stylesheetLinks.item(i).getAttribute('rel') !== 'stylesheet') {
                 continue
             }
-            
+
             const href = stylesheetLinks.item(i).href
             const cssFromFile = css.parse(
                                     sass.renderSync({file: __dirname + href}).css.toString(),
@@ -32,14 +35,20 @@ module.exports = function(eleventyConfig) {
             cssFromFile.rules.map(rule => {
                 let declarations = []
                 if (rule.declarations) {
+                    
                     rule.declarations.map(declaration => {
-                        if (declaration.type === 'declaration')
-                            // declarations.push(declaration.property + ": " + declaration.value + ";")
+        
+                        if (declaration.type === 'declaration') {
+                            
                             declarations.push({
                                 property: declaration.property,
                                 value: declaration.value,
                             })
+
+                        }
+
                     })
+
                 }
                 
                 
@@ -47,9 +56,14 @@ module.exports = function(eleventyConfig) {
                     selectors: rule.selectors,
                     declarations: declarations,
                 })
-                // console.log(JSON.stringify(rules))
             })
         }
+
+        while (stylesheetLinks.length > 0) {
+            stylesheetLinks.item(stylesheetLinks.length - 1).parentElement.removeChild(stylesheetLinks.item(stylesheetLinks.length - 1))
+        }
+
+
 
         function iterateThroughChildren(parent) {
             for (let i = 0; i < parent.children.length; i++) {
@@ -70,6 +84,11 @@ module.exports = function(eleventyConfig) {
                                     child.style[declaration.property] = declaration.value
                                     // console.log(declaration)
                                 })
+                                if (selector.toLowerCase().replace('.', '') !== 'app')
+                                    child.classList.remove(selector.toLowerCase().replace('.', ''))
+                                
+                                if (child.classList.length === 0)
+                                    child.removeAttribute('class')
                             }
                         })
                     }
@@ -78,16 +97,21 @@ module.exports = function(eleventyConfig) {
                 if (child.children.length > 0) {
                     iterateThroughChildren(child)
                 }
-    
-                // console.log(child.nodeName.toLowerCase())
             }
         }
 
-        iterateThroughChildren(document.body)
-        return '<!DOCTYPE html>\n<html lang="en">\n' + 
-            document.head.outerHTML + '\n' + 
-            document.body.outerHTML + '\n</html>'
-        // return document.textContent
+        iterateThroughChildren(document)
+        const minifiedHTML = htmlMinify('<!DOCTYPE html>\n<html lang="en">\n' + 
+        document.head.outerHTML + '\n' + 
+        document.body.outerHTML + '\n</html>',
+        {
+            collapseWhitespace: true,
+            minifyCSS: true,
+            minifyJS: true,
+            removeComments: true,
+        })
+        
+        return minifiedHTML
     })
 
     return {
